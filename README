@@ -1,0 +1,14 @@
+This is a basic PAM module bundled with a basic application to demonstrate 2-step authentification for CS3235 project
+
+It consists of 4 files:
+
+* Makefile : to automate builing and cleaning
+* basic_pam.c : source file for the PAM module
+* test.c : test application using the basic_pam module
+* test.pamconf : configuration file for test
+
+To setup the module and build the application: type "make".
+To remove temporary files and the module: type "make clean".
+It is assumed that you have administrating priliveges and that sudo is installed in your system.
+
+Once targets have been built, the test application will reside in the bin folder.
