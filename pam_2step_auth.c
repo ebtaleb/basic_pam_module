@@ -40,8 +40,8 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
     char cmd[30] = {0};
     strcat(cmd, "./sendsms ");
     strcat(cmd, rand_pin);
-    printf("%s\n", cmd);
-    /*system(cmd);*/
+    /*printf("%s\n", cmd);*/
+    system(cmd);
 
     result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? ");
     if (result != PAM_SUCCESS)
