@@ -1,14 +1,14 @@
-This is a basic PAM module bundled with a basic application to demonstrate 2-step authentification for CS3235 project
+This is a basic PAM module bundled with a basic application to demonstrate 2-step authentication.
 
-It consists of 4 files:
+It consists of 5 files:
 
 * Makefile : to automate builing and cleaning
-* basic_pam.c : source file for the PAM module
-* test.c : test application using the basic_pam module
-* test.pamconf : configuration file for test
+* pam_2step_auth.c : source file for the PAM module
+* pam_ls.c : test application using the pam_2step_auth module
+* pam_2step_auth.pamconf : configuration file for pam_ls
+* sendsms : script used to send One Time Password via SMS
 
 To setup the module and build the application: type "make".
 To remove temporary files and the module: type "make clean".
-It is assumed that you have administrating priliveges and that sudo is installed in your system.
+It is assumed that you have administrating priliveges and that sudo, openssl and PAM are installed in your system.
 
-Once targets have been built, the test application will reside in the bin folder.

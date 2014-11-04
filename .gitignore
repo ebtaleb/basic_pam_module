@@ -1,4 +1,4 @@
 *.o
 *.swp
 *.so
-check_user
+pam_ls

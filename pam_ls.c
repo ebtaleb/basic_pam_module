@@ -7,43 +7,32 @@ static struct pam_conv conv = { misc_conv, NULL };
 
 int main(int argc, char *argv[])
 {
-    pam_handle_t *pamh = NULL;
-    const char *user = "masked_rider";
-    int return_value;
-
-    if (argc == 2) {
-        user = argv[1];
-    }
-
-    if (argc > 2) {
-        fprintf(stderr, "Usage: check_user [username]\n");
+    if (argc != 2) {
+        fprintf(stderr, "Usage: pam_ls [username]\n");
         exit(1);
     }
 
-    if ((return_value = pam_start("test", user, &conv, &pamh)) != PAM_SUCCESS)
+    pam_handle_t *pamh = NULL;
+    int return_value;
+    const char *user = argv[1];
+
+    if ((return_value = pam_start("pam_ls", user, &conv, &pamh)) != PAM_SUCCESS)
         goto error_handler;
 
     // have we been authentificated?
     if ((return_value = pam_authenticate(pamh, 0)) != PAM_SUCCESS)
         goto error_handler;
-    else
-        fprintf(stdout, "Great success!\n Welcome %s\n", user);
 
     if ((return_value = pam_open_session(pamh, 0)) != PAM_SUCCESS)
         goto error_handler;
 
-    printf("Session opened, doing our stuff...\n");
-
     // do our stuff
     system("/bin/ls -la");
 
-    printf("we are done here, closing session\n");
+    if ((return_value = pam_close_session(pamh, 0)) != PAM_SUCCESS)
+        goto error_handler;
 
 error_handler:
-    if ((return_value = pam_close_session(pamh, 0)) != PAM_SUCCESS) {
-        perror("nope");
-        exit(1);
-    }
 
     pam_end(pamh, return_value);
 

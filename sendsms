@@ -1,0 +1,25 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+import urllib
+import sys
+
+def send_oneSMS (message, to_number):
+    key = 'a317510e'
+    secret = 'f6a783a2'
+    SERVER ='http://rest.nexmo.com/sms/xml?'
+
+    arguments = [('api_key', key), \
+                ('api_secret', secret), \
+                ('from', "Minami Kotori"), \
+                ('to', to_number), \
+                ('text', message)]
+
+    url = SERVER + \
+    urllib.urlencode(arguments)
+    #print(url)
+    result = urllib.urlopen(url)
+    resultStr = result.readline();
+    #print(resultStr)
+
+result = send_oneSMS("Your OTP is " + sys.argv[1], '6586702165')

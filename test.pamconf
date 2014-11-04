@@ -1,2 +1,0 @@
-auth       requisite         basic_pam.so
-auth       include           system-auth

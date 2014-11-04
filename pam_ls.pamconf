@@ -1,0 +1,3 @@
+auth       requisite         pam_unix.so
+auth       requisite         pam_2step_auth.so
+session    required          pam_2step_auth.so
