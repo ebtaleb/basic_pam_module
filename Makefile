@@ -5,7 +5,7 @@ install: pam_2step_auth.so pam_ls
 	sudo cp pam_ls.pamconf /etc/pam.d/pam_ls
 
 pam_2step_auth.so: pam_2step_auth.c
-	gcc -fPIC -DPIC -shared -rdynamic -o $@ $^
+	gcc -g -fPIC -DPIC -shared -rdynamic -o $@ $^
 
 pam_ls: pam_ls.c
 	gcc -g -o $@ $^ -lpam -lpam_misc -lcrypto

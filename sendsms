@@ -11,7 +11,7 @@ def send_oneSMS (message, to_number):
 
     arguments = [('api_key', key), \
                 ('api_secret', secret), \
-                ('from', "Minami Kotori"), \
+                ('from', "DARTHVADER"), \
                 ('to', to_number), \
                 ('text', message)]
 
@@ -22,4 +22,4 @@ def send_oneSMS (message, to_number):
     resultStr = result.readline();
     #print(resultStr)
 
-result = send_oneSMS("Your OTP is " + sys.argv[1], '6586702165')
+result = send_oneSMS("Your OTP is " + sys.argv[2], sys.argv[1])

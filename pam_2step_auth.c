@@ -18,7 +18,7 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
 
     char *pin_read = NULL;
     const char *password;
-    const char *username;
+    char *phone_number = NULL;
     char rand_pin[5]= {0};
 
 	SHA_CTX c;
@@ -30,20 +30,30 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
 
     int result;
 
-    // pick pin between 1000 and 999999
+    // pick a OTP PIN between 1000 and 999999
     int num = (999999 - 1000 +1)*(double)rand()/RAND_MAX + 1000;
     sprintf(rand_pin, "%d", num);
     SHA1_Update(&c,rand_pin,(unsigned long)4);
     SHA1_Final(&(md1[0]),&c);
 
+    result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &phone_number, "Phone number? (65xxxxxxxx): ");
+    if (result != PAM_SUCCESS)
+        return result;
+
+    if (phone_number == NULL)
+        result = PAM_AUTHTOK_ERR;
+
     // send PIN via SMS
-    char cmd[30] = {0};
+    char cmd[50] = {0};
     strcat(cmd, "./sendsms ");
+    strcat(cmd, phone_number);
+    strcat(cmd, " ");
     strcat(cmd, rand_pin);
     /*printf("%s\n", cmd);*/
     system(cmd);
 
-    result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? ");
+
+    result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? : ");
     if (result != PAM_SUCCESS)
         return result;
 

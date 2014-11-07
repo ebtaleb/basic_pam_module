@@ -8,7 +8,7 @@ static struct pam_conv conv = { misc_conv, NULL };
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
-        fprintf(stderr, "Usage: pam_ls [username]\n");
+        fprintf(stderr, "Usage: pam_ls [unix_username]\n");
         exit(1);
     }
 
