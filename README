@@ -8,7 +8,7 @@ It consists of 5 files:
 * pam_2step_auth.pamconf : configuration file for pam_ls
 * sendsms : script used to send One Time Password via SMS
 
+It is assumed that you have administrating priliveges and that make, openssl and PAM are installed in your system.
 To setup the module and build the application: type "make".
 To remove temporary files and the module: type "make clean".
-It is assumed that you have administrating priliveges and that sudo, openssl and PAM are installed in your system.
 
