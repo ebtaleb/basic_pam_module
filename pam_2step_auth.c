@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <openssl/sha.h>
+#include <sys/time.h>
 
 void seedrand() {
     FILE *f = fopen("/dev/urandom", "r");
@@ -37,6 +38,9 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
 	unsigned char md1[SHA256_DIGEST_LENGTH];
 	unsigned char md2[SHA256_DIGEST_LENGTH];
 
+    struct timeval start, end;
+    double time_elapsed;
+
 	SHA256_Init(&c);
     seedrand();
 
@@ -60,9 +64,18 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
     sprintf(cmd, "./sendsms %s %s", phone_number, rand_pin);
     system(cmd);
 
+    gettimeofday(&start, NULL);
+
     result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? :");
     if (result != PAM_SUCCESS)
         return result;
+
+    gettimeofday(&end, NULL);
+    time_elapsed = (double) (end.tv_sec - start.tv_sec)
+                   + (double) (end.tv_usec - start.tv_usec) / 1000000;
+    if (time_elapsed > 60) {
+        return PAM_AUTHTOK_ERR;
+    }
 
 	SHA256_Init(&c);
     SHA256_Update(&c,pin_read,(unsigned long)4);
