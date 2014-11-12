@@ -14,6 +14,18 @@ void seedrand() {
     fclose(f);
 }
 
+int cmp_hash(unsigned char *h1, unsigned char *h2)
+{
+    int i = 0;
+
+    for (i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        if (h1[i] != h2[i])
+            return 0;
+    }
+
+    return 1;
+}
+
 int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv) {
 
     char *pin_read = NULL;
@@ -59,7 +71,7 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
     if (pin_read == NULL || strlen(pin_read) < 4 || strlen(pin_read) > 6) {
         result = PAM_AUTHTOK_ERR;
     } else {
-        if(!strcmp(pin_read, rand_pin))
+        if (cmp_hash(md1, md2))
             result = PAM_SUCCESS;
         else
             result = PAM_AUTHTOK_ERR;
