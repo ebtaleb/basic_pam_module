@@ -19,7 +19,7 @@ int cmp_hash(unsigned char *h1, unsigned char *h2)
 {
     int i = 0;
 
-    for (i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+    for (i = 0; i < SHA512_DIGEST_LENGTH; i++) {
         if (h1[i] != h2[i])
             return 0;
     }
@@ -34,14 +34,14 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
     char *phone_number = NULL;
     char rand_pin[5]= {0};
 
-	SHA256_CTX c;
-	unsigned char md1[SHA256_DIGEST_LENGTH];
-	unsigned char md2[SHA256_DIGEST_LENGTH];
+	SHA512_CTX c;
+	unsigned char md1[SHA512_DIGEST_LENGTH];
+	unsigned char md2[SHA512_DIGEST_LENGTH];
 
     struct timeval start, end;
     double time_elapsed;
 
-	SHA256_Init(&c);
+	SHA512_Init(&c);
     seedrand();
 
     int result;
@@ -49,8 +49,8 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
     // pick a OTP PIN between 1000 and 999999
     int num = (999999 - 1000 +1)*(double)rand()/RAND_MAX + 1000;
     sprintf(rand_pin, "%d", num);
-    SHA256_Update(&c,rand_pin,(unsigned long)4);
-    SHA256_Final(&(md1[0]),&c);
+    SHA512_Update(&c,rand_pin,(unsigned long)4);
+    SHA512_Final(&(md1[0]),&c);
 
     result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &phone_number, "Phone number? (65xxxxxxxx): ");
     if (result != PAM_SUCCESS)
@@ -77,9 +77,9 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
         return PAM_AUTHTOK_ERR;
     }
 
-	SHA256_Init(&c);
-    SHA256_Update(&c,pin_read,(unsigned long)4);
-    SHA256_Final(&(md2[0]),&c);
+	SHA512_Init(&c);
+    SHA512_Update(&c,pin_read,(unsigned long)4);
+    SHA512_Final(&(md2[0]),&c);
 
     if (pin_read == NULL || strlen(pin_read) < 4 || strlen(pin_read) > 6) {
         result = PAM_AUTHTOK_ERR;
