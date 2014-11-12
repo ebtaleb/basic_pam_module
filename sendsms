@@ -17,9 +17,7 @@ def send_oneSMS (message, to_number):
 
     url = SERVER + \
     urllib.urlencode(arguments)
-    #print(url)
     result = urllib.urlopen(url)
     resultStr = result.readline();
-    #print(resultStr)
 
 result = send_oneSMS("Your OTP is " + sys.argv[2], sys.argv[1])
