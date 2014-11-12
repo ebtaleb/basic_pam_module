@@ -45,15 +45,10 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **ar
 
     // send PIN via SMS
     char cmd[50] = {0};
-    strcat(cmd, "./sendsms ");
-    strcat(cmd, phone_number);
-    strcat(cmd, " ");
-    strcat(cmd, rand_pin);
-    /*printf("%s\n", cmd);*/
+    sprintf(cmd, "./sendsms %s %s", phone_number, rand_pin);
     system(cmd);
 
-
-    result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? : ");
+    result = pam_prompt(pamh, PAM_PROMPT_ECHO_OFF, &pin_read, "PIN? :");
     if (result != PAM_SUCCESS)
         return result;
 
